@@ -1,7 +1,7 @@
 package com.users.repositories;
 
-import org.hibernate.validator.constraints.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.UUID;
 
 import com.users.models.UserModel;
 

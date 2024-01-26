@@ -1,20 +1,28 @@
 package com.users.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.users.models.UserModel;
+import com.users.producers.UserProducer;
 import com.users.repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
 public class UserService {
-    @Autowired
-    UserRepository userRepository;
+    final UserRepository userRepository;
+
+    final UserProducer userProducer;
+
+    UserService(UserProducer userProducer, UserRepository userRepository) {
+        this.userProducer = userProducer;
+        this.userRepository = userRepository;
+    }
 
     @Transactional
     public UserModel saveUser(UserModel userModel) {
-        return userRepository.save(userModel);
+        userModel = userRepository.save(userModel);
+        userProducer.publishMessageEmail(userModel);
+        return userModel;
     }
 }
